@@ -1,0 +1,126 @@
+---
+title: "Homelessness Trends and Housing Interventions: Analyzing Population-Specific Challenges from 2018 to 2024"
+author:
+  - Ruizi Liu
+date: 09-23-2024
+date-format: long
+format: pdf
+number-sections: true
+# The toc parameter used to create a table of contents was obtained from
+# Quarto documentation:
+# https://quarto.org/docs/reference/formats/pdf.html
+toc: true
+
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#### Preamble ####
+
+# Purpose: Generates a paper titled "Long-term care homes were hit hardest by
+# 2023 disease outbreaks in Toronto healthcare facilities" in PDF format when
+# rendered.
+# Author: Ruizi Liu
+# Date: September 23, 2024
+# Contact: ruizi.liu@mail.utoronto.ca
+# Pre-requisites: Run the files "01-download_data.R" and "02-data_cleaning.R".
+```
+
+```{r}
+#| echo: false
+#| warning: false
+# install.packages("tidyverse")
+# install.packages("opendatatoronto")
+# install.packages("janitor")
+# install.packages("dplyr")
+library(tidyverse)
+# library(opendatatoronto)
+library(tidyverse)
+library(janitor)
+library(dplyr)
+```
+
+# Introduction {#sec-introduction}
+
+Homelessness remains a critical societal issue worldwide, impacting both urban and rural areas. The problem is particularly pressing in urban centers where housing affordability, economic instability, and social services are often strained[@nielsen2011psychiatric]. Homelessness affects vulnerable populations disproportionately, including families, refugees, Indigenous people, youth, and individuals facing chronic homelessness[@stergiopoulos2003old]. These groups face unique challenges that can prevent them from securing stable housing, despite various efforts by governmental and non-governmental organizations[@mandell2007homeless].
+
+This report focuses on the analysis of homelessness trends and housing movements in the period between 2018 and 2024. The objective is to assess the changes in the homeless population, evaluate the effectiveness of housing interventions, and identify which population groups are most affected by homelessness[@laws1992emergency]. Understanding these trends is essential for policymakers, social services, and community organizations in formulating targeted interventions to alleviate homelessness and improve housing stability[@hurtubise2009shelters].
+
+By leveraging a comprehensive dataset on the actively homeless population and those moved to housing, this report aims to highlight the nuances within the homelessness crisis[@jadidzadeh2018patterns]. The analysis is structured around key questions: How has the actively homeless population changed over time? What impact did the COVID-19 pandemic have on homelessness? Which population groups have benefited the most from housing initiatives, and which groups remain underserved? Addressing these questions provides a foundation for developing more effective policies and programs that can address the root causes of homelessness and ensure more equitable access to housing solutions[@hwang2000mortality].
+
+The subsequent sections of this report will delve into detailed time series analysis of the homeless population, explore population-specific trends, and assess the outcomes of housing programs aimed at moving individuals from homelessness into stable housing situations.
+
+# Data {#sec-data}
+
+## Overview {#sec-data-overview}
+
+The dataset used in this analysis spans from 2018 to 2024 and includes monthly records of the actively homeless population, broken down by key population groups. These population groups include "Chronic," "Refugees," "Families," "Indigenous," "Youth," "Single Adults," and "Non-refugees." Each of these groups faces unique challenges when it comes to accessing housing, and the dataset provides an opportunity to examine these challenges in depth.
+
+The data provides monthly information on individuals experiencing homelessness who are entering or exiting the shelter system. It includes the number of unique individuals who have used the shelter system at least once within the past three months and are still considered to be actively homeless, meaning they have not been discharged to permanent housing[@citeopendatatoronto].
+
+Key variables in the dataset include:
+
+Actively Homeless Count: The total number of individuals who were homeless during a given month.
+Population Group: The group to which the homeless individual belongs, allowing for a breakdown of trends across different demographic groups.
+Moved to Housing Count: The number of individuals from each population group who were successfully transitioned from homelessness to housing during a given month.
+The time series data tracks changes in homelessness month by month, providing a rich view of how external events, such as the COVID-19 pandemic, affected homelessness levels. By capturing monthly changes, the dataset allows for detailed analysis of seasonal patterns and how homelessness trends may fluctuate in response to social, economic, or policy shifts[@mullaly2002alternative].
+
+Additionally, the dataset includes information on the effectiveness of housing interventions through the "Moved to Housing" variable, which tracks the number of homeless individuals successfully placed into stable housing[@vakili2004housing]. This variable is crucial for understanding which population groups are being effectively served by housing programs and which may require additional resources or targeted interventions to ensure their transition out of homelessness.
+
+Overall, the dataset provides a comprehensive view of homelessness trends over six years, with a focus on both the overall population and specific subgroups[@dutton2019incidence]. The combination of these variables allows for a multi-dimensional analysis, enabling us to not only identify trends but also to understand the factors driving these trends. This detailed approach is critical for informing future policy decisions and improving the design of homelessness interventions.
+
+In the following sections, we will explore the results of this analysis through visual representations of homelessness trends and housing movements, focusing on both the overall population and specific vulnerable groups. The insights derived from this analysis will form the basis of recommendations for future homelessness reduction strategies.
+
+Using the `R` programming language [@citeR], `tidyverse` [@citetidyverse] packages and the `lubridate` [@citelubridate] package were used to simulate the dataset and generate tests for it. The `opendatatoronto` [@citeopendatatoronto] and the `tidyverse` [@citetidyverse] packages were then applied in order to download the raw Toronto Shelter System Flow dataset. Next, the `tidyverse` package [@citetidyverse] and the `dplyr` package [@citedplyr] was used to clean the raw dataset The `tidyverse` [@citetidyverse] packages were used to test the cleaned dataset.
+
+## Results {#sec-data-results}
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+#### Loading the analysis data ####
+data <- read_csv("/Users/abcdefg/Desktop/starter_folder-main/data/analysis_data/analysis_data.csv")
+```
+
+After loading the dataset using the`R`programming language [@citeR], the `tidyverse`  package[@citetidyverse], the package[@citedplyr] was used to generate graphs. In doing so, R code was adapted from @tellingstorieswithdata.
+
+```{r}
+#| label: fig-time-series-trend
+#| fig-cap: Time Series Trend of Actively Homeless
+#| echo: false
+#| warning: false
+all_population_df <- data %>% filter(population_group == 'All Population')
+
+ggplot(all_population_df, aes(x = date, y = actively_homeless)) +
+  geom_line(color = 'blue') +
+  geom_point() +
+  labs(x = 'Date', y = 'Actively Homeless Count') +
+  theme_minimal()
+```
+@fig-time-series-trend presents a fluctuating but generally increasing trend in the actively homeless population from 2017 to 2024, with numbers ranging between 8,000 and over 11,000. There is notable volatility, particularly between 2019 and 2020, when the population experienced a sharp drop in mid-2020, falling below 8,000. This decline is likely due to pandemic-related interventions such as eviction moratoriums and emergency housing measures [@leung2008homelessness]. However, these temporary solutions were followed by a rapid increase, with the homeless population rising steadily after late 2020. By mid-2023, the number surpassed 11,000 individuals.
+
+From late 2022 into 2024, the homeless count plateaued between 10,500 and 11,000, suggesting some stabilization but at a higher level than pre-pandemic figures. This persistent elevation indicates ongoing difficulties in reducing homelessness, highlighting the long-term effects of economic instability and housing shortages. The volatility and overall upward trend suggest that homelessness is influenced by a combination of socio-economic factors, such as rising housing costs and limited access to affordable housing. Despite some stabilization, the elevated baseline points to the need for long-term policy solutions that address the root causes of homelessness, including economic disparities and inadequate housing policies.
+
+```{r}
+#| echo: false
+#| warning: false
+#| label: fig-moved-to-housing
+#| fig-cap: "Boxplot of Moved to Housing by Population Group"
+ggplot(data, aes(x = population_group, y = moved_to_housing, fill = population_group)) +
+  geom_boxplot() +
+  labs(x = 'Population Group', y = 'Moved to Housing Count') +
+  theme_minimal() +
+  theme(legend.position = 'none', axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The @fig-moved-to-housing illustrates the distribution of individuals moved to housing across various population groups. Each box represents the interquartile range (IQR), with the line inside the box denoting the median value. The Refugees group exhibits the widest spread, indicating a high level of variability in housing counts, with a median around 400 and several outliers. Families also have a broad range, with a median close to 300, suggesting that a significant number of families have been moved to housing, though there is notable variability in the data.
+
+Chronic and Single Adult groups show a more compact distribution, with their medians near 200 and 100, respectively. Non-refugees have the smallest spread, indicating low variability with a median just above 100. The Indigenous and Youth groups show the lowest counts, with medians near or below 100 and several outliers, indicating smaller but consistent efforts to move these populations to housing.
+
+Overall, the boxplot highlights considerable variation in housing efforts among different population groups, with Refugees and Families seeing the largest efforts, while Youth and Indigenous groups exhibit smaller, more consistent housing outcomes.
+
+
+
