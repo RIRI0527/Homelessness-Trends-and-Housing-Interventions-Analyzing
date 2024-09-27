@@ -81,4 +81,3 @@ if (!all(cleaned_data$population_group %in% expected_groups)) {
 
 #### If all tests pass ####
 cat("All tests passed successfully!\n")
-

@@ -15,7 +15,7 @@ library(dplyr)
 raw_data <- read_csv("data/raw_data/raw_data.csv")
 
 # Convert 'date.mmm.yy.' to Date format.
-raw_data$date <- as.Date(paste0('01-', raw_data$`date.mmm.yy.`), format = '%d-%b-%y')
+raw_data$date <- as.Date(paste0("01-', raw_data$`date.mmm.yy."), format = "%d-%b-%y")
 
 # Filter for 'All Population' and select the required columns
 cleaned_data <- raw_data %>%
@@ -27,4 +27,3 @@ head(cleaned_data)
 
 #### Save the cleaned data ####
 write_csv(cleaned_data, "data/analysis_data/analysis_data.csv")
-

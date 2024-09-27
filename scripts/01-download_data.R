@@ -22,12 +22,8 @@ data <- data %>%
   list_package_resources()
 data
 
-data <- data[2,] %>%
+data <- data[2, ] %>%
   get_resource()
 data
- 
 #### Write the data ####
 write_csv(data, "data/raw_data/raw_data.csv")
-
-
-         
