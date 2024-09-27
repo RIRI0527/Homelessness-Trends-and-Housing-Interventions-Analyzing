@@ -21,10 +21,4 @@ The repo is structured as:
 
 An LLM, specifically Chat-GPT4, was used to assist with this paper, primarily supporting the coding aspects rather than the writing itself. The complete chat history is available in the file located at other/llm/usage.txt.
 
-## Some checks
 
-- [ ] Change the rproj file name so that it's not starter_folder.Rproj
-- [ ] Change the README title so that it's not Starter folder
-- [ ] Remove files that you're not using
-- [ ] Update comments in R scripts
-- [ ] Remove this checklist
