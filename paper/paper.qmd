@@ -3,7 +3,7 @@ title: "Homelessness Trends and Housing Interventions: Analyzing Population-Spec
 author:
   - Ruizi Liu
 thanks: "A GitHub Repository containing all data, R code, and other files used in this investigation is located here: <https://github.com/RIRI0527/Homelessness-Trends-and-Housing-Interventions-Analyzing.git>"
-date: 09-23-2024
+date: 09-27-2024
 date-format: long
 abstract: "This paper analyzes trends in homelessness and the effectiveness of housing interventions between 2018 and 2024, focusing on vulnerable population groups such as refugees, families, and individuals experiencing chronic homelessness. The findings show a fluctuating but generally increasing homelessness rate, with temporary declines during the COVID-19 pandemic due to emergency measures. However, chronic homelessness and refugee populations continue to rise, signaling gaps in existing housing programs. This research highlights the need for long-term, tailored interventions to address the root causes of homelessness and provide more equitable access to stable housing across different population groups."
 format: pdf
@@ -33,26 +33,20 @@ bibliography: references.bib
 #| echo: false
 #| warning: false
 #### Loading Packages ####
-
-# install.packages("tidyverse")
-# install.packages("opendatatoronto")
-# install.packages("janitor")
-# install.packages("dplyr")
-# install.packages("knitr")
-# install.packages("here")
 library(tidyverse)
 library(opendatatoronto)
+library(conflicted)
 library(janitor)
 library(dplyr)
 library(knitr)
-#library(here)
+library(here)
 
 #### Loading the analysis data ###
-data <- read_csv(here::here("data/analysis_data/analysis_data.csv"), show_col_types = FALSE)
-
+data <- read_csv(here::here("data/analysis_data/analysis_data.csv"),
+  show_col_types = FALSE
+)
 ```
 
-\newpage
 # Introduction {#sec-introduction}
 
 Homelessness remains a critical societal issue worldwide, impacting both urban and rural areas. The problem is particularly pressing in urban centers where housing affordability, economic instability, and social services are often straine. Homelessness affects vulnerable populations disproportionately, including families, refugees, Indigenous people, youth, and individuals facing chronic homelessness[@stergiopoulos2003old]. These groups face unique challenges that can prevent them from securing stable housing, despite various efforts by governmental and non-governmental organizations[@mandell2007homeless].
@@ -107,10 +101,10 @@ Overall, the dataset provides a comprehensive view of homelessness trends over s
 
 In the following sections, we will explore the results of this analysis through visual representations of homelessness trends and housing movements, focusing on both the overall population and specific vulnerable groups. The insights derived from this analysis will form the basis of recommendations for future homelessness reduction strategies.
 
-Using the `R` programming language [@citeR], `tidyverse` [@citetidyverse] packages and the `lubridate` [@citelubridate] package were used to simulate the dataset and generate tests for it. The `opendatatoronto` [@citeopendatatoronto] and the `tidyverse` [@citetidyverse] packages were then applied in order to download the raw Toronto Shelter System Flow dataset. The `tidyverse` package [@citetidyverse] and the `dplyr` package [@citedplyr] were used to clean the raw dataset The `tidyverse` [@citetidyverse] packages were used to test the cleaned dataset. 
+Using the `R` programming language [@citeR], `tidyverse` [@citetidyverse] packages and the `lubridate` [@citelubridate] package were used to simulate the dataset and generate tests for it. Use the conflicted [@citeconflicted] package to force all conflicts to become errors. The `opendatatoronto` [@citeopendatatoronto] and the `tidyverse` [@citetidyverse] packages were then applied in order to download the raw Toronto Shelter System Flow dataset. The `tidyverse` package [@citetidyverse] and the `dplyr` package [@citedplyr] were used to clean the raw dataset The `tidyverse` [@citetidyverse] packages were used to test the cleaned dataset.
 
 ## Results {#sec-data-results}
-After loading the dataset using the`R`programming language [@citeR], the `tidyverse`  package[@citetidyverse], the package[@citedplyr] was used to generate graphs. In doing so, R code was adapted from @tellingstorieswithdata.
+After loading the dataset using the`R`programming language [@citeR], the `tidyverse`  package[@citetidyverse] and the `here` package [@citehere], the package[@citedplyr] was used to generate graphs. In doing so, R code was adapted from @tellingstorieswithdata.
 
 ```{r}
 #| label: fig-time-series-trend
@@ -119,17 +113,15 @@ After loading the dataset using the`R`programming language [@citeR], the `tidyve
 #| warning: false
 
 #### First Graph ####
-
-## This code is based on knowledge from Alexander (2024). 
-
+## This code is based on knowledge from Alexander (2024).
 # Filter for 'All Population'
-all_population_df <- data %>% filter(population_group == 'All Population')
+all_population_df <- data %>% dplyr::filter(population_group == 'All Population')
 
 # Plot actively homeless trend over time
 ggplot(all_population_df, aes(x = date, y = actively_homeless)) +
-  geom_line(color = 'blue') +
+  geom_line(color = "blue") +
   geom_point() +
-  labs(x = 'Date', y = 'Actively Homeless Count') +
+  labs(x = "Date", y = "Actively Homeless Count") +
   theme_minimal()
 ```
 
@@ -150,9 +142,12 @@ From late 2022 into 2024, the homeless count plateaued between 10,500 and 11,000
 # Boxplot of moved to housing by population group
 ggplot(data, aes(x = population_group, y = moved_to_housing, fill = population_group)) +
   geom_boxplot() +
-  labs(x = 'Population Group', y = 'Moved to Housing Count') +
+  labs(x = "Population Group", y = "Moved to Housing Count") +
   theme_minimal() +
-  theme(legend.position = 'none', axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
 The @fig-moved-to-housing illustrates the distribution of individuals moved to housing across various population groups. Each box represents the interquartile range (IQR), with the line inside the box denoting the median value. The Refugees group exhibits the widest spread, indicating a high level of variability in housing counts, with a median around 400 and several outliers. Families also have a broad range, with a median close to 300, suggesting that a significant number of families have been moved to housing, though there is notable variability in the data.
@@ -170,14 +165,18 @@ Overall, the boxplot highlights considerable variation in housing efforts among 
 #### Third Graph ####
 
 # This code is based on knowledge from Alexander (2024).
-
 # Create a complex line plot with facets by population group and trend lines
-ggplot(data, aes(x = date, y = actively_homeless, color = population_group)) +
-  geom_line(size = 1) + 
-  geom_smooth(method = "loess", se = FALSE, linetype = "dashed", size = 1, color = "black") + 
-  facet_wrap(~ population_group, scales = "free_y") + 
-  labs(x = "Date", y = "Actively Homeless Count",
-       color = "Population Group") + 
+ggplot(
+  data,
+  aes(x = date, y = actively_homeless, color = population_group)
+) +
+  geom_line(size = 1) +
+  geom_smooth(method = "loess", se = FALSE, linetype = "dashed", size = 1, color = "black") +
+  facet_wrap(~population_group, scales = "free_y") +
+  labs(
+    x = "Date", y = "Actively Homeless Count",
+    color = "Population Group"
+  ) +
   theme_minimal() +
   theme(legend.position = "none") # Hides the legend since facets are clear enough
 ```
