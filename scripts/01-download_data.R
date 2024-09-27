@@ -11,6 +11,9 @@
 library(opendatatoronto)
 library(tidyverse)
 
+#### Checking the working directory to ensure the write_csv works properly ####
+getwd()
+
 #### Downloading the data ####
 data <- search_packages("toronto-shelter-system-flow")
 data
@@ -22,8 +25,9 @@ data
 data <- data[2,] %>%
   get_resource()
 data
-
+ 
 #### Write the data ####
-write_csv(data, "/Users/abcdefg/Desktop/starter_folder-main/data/raw_data/raw_data.csv")
+write_csv(data, "data/raw_data/raw_data.csv")
+
 
          
