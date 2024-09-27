@@ -10,9 +10,10 @@
 
 #### Workspace setup ####
 library(tidyverse)
+library(here)
 
 #### Test for simulate data ####
-simulated_data <- read_csv("data/raw_data/simulated.csv")
+simulated_data <- read_csv(here::here("data/raw_data/simulated.csv"))
 #### Test 1: No negative values in 'actively_homeless' and 'moved_to_housing' columns ####
 if (any(simulated_data$actively_homeless < 0)) {
   stop("Test 1 failed: Negative values found in 'actively_homeless' column")
@@ -47,7 +48,7 @@ if (!all(simulated_data$population_group %in% expected_groups)) {
 cat("All tests passed successfully!\n")
 
 #### Test for cleaned data ####
-cleaned_data <- read_csv("data/analysis_data/analysis_data.csv")
+cleaned_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
 #### Test 1: No negative values in 'actively_homeless' and 'moved_to_housing' columns ####
 if (any(cleaned_data$actively_homeless < 0)) {

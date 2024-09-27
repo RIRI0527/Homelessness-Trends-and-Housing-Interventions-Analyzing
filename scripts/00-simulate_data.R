@@ -11,6 +11,7 @@
 #### Workspace setup ####
 library(tidyverse)
 library(lubridate)
+library(here)
 
 # Set seed for reproducibility
 set.seed(527)
@@ -37,4 +38,5 @@ simulated_data <- expand.grid(date = dates, population_group = population_groups
 head(simulated_data)
 
 #### Save the simulated data to CSV ####
-write_csv(simulated_data, "data/raw_data/simulated.csv")
+write_csv(simulated_data, here::here("data/raw_data/simulated.csv"))
+
